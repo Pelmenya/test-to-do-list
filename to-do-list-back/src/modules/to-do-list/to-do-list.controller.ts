@@ -1,12 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { ToDoListService } from './to-do-list.service';
 import { CreateTaskDto } from './types/create-task.dto';
+import { UpdateTaskDto } from './types/update-task.dto';
 
 @Controller('to-do-list')
 export class ToDoListController {
   constructor(private readonly toDoListService: ToDoListService) {}
 
-  @Post('create')
+  @Post('')
   async createTask(@Body() dto: CreateTaskDto) {
     return await this.toDoListService.createTask(dto);
   }
@@ -14,5 +15,10 @@ export class ToDoListController {
   @Get('')
   async getAllTasks() {
     return await this.toDoListService.getAllTasks();
+  }
+
+  @Put('')
+  async updateTask(@Body() dto: UpdateTaskDto) {
+    return await this.toDoListService.updateTask(dto);
   }
 }
