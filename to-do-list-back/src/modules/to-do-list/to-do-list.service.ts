@@ -20,7 +20,10 @@ export class ToDoListService {
         id: newTask.id,
       },
     });
-    console.log(res);
     return res;
+  }
+
+  async getAllTasks() {
+    return await this.toDoListRepository.find();
   }
 }
