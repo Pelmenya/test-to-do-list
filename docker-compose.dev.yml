@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+
+  adminer_container:
+    image: adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    ports:
+      - 8080:8080
+
+  back:
+    build: ./to-do-list-back
+    container_name: to-do-list-back
+    volumes:
+      - ./to-do-list-back:/app
+    ports:
+      - 3000:${PORT}
+    environment:      
+      - PORT=${PORT}
+      - NODE_ENV=dev
+    depends_on:
+      - postgres
+    working_dir: /app
+    command: sh -c "cd /app; npm install; npm run start:dev" 
+
+volumes:
+  postgres_db:
