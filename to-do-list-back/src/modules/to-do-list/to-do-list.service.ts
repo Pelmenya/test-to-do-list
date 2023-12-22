@@ -41,4 +41,9 @@ export class ToDoListService {
       },
     });
   }
+
+  async deleteTask(id: number) {
+    const res = await this.toDoListRepository.delete(id);
+    return res;
+  }
 }

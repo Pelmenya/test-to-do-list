@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ToDoListService } from './to-do-list.service';
 import { CreateTaskDto } from './types/create-task.dto';
 import { UpdateTaskDto } from './types/update-task.dto';
@@ -20,5 +28,10 @@ export class ToDoListController {
   @Put('')
   async updateTask(@Body() dto: UpdateTaskDto) {
     return await this.toDoListService.updateTask(dto);
+  }
+
+  @Delete(':id')
+  async deleteTask(@Param('id') id: number) {
+    return await this.toDoListService.deleteTask(id);
   }
 }
