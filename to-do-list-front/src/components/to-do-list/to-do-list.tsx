@@ -9,8 +9,6 @@ export const ToDoList = () => {
     const [getAllTasks, { isLoading, data }] =
         useLazyGetAllTasksQuery();
 
-    const [tasks, setTasks] = useState(data);
-
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     
     const handlerCloseCreateModal = useCallback(
@@ -26,10 +24,6 @@ export const ToDoList = () => {
     useEffect(() => {
         getAllTasks('').unwrap();
     }, [getAllTasks, data]);
-
-    useEffect(() => {
-        setTasks(data)
-    }, [data])
 
     return (
         <div className="border border-orange-300 px-4 py-4 mt-8 mb-8 w-ffull text-sm font-medium shadow-xl rounded-[0.375rem]">
@@ -52,8 +46,8 @@ export const ToDoList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {tasks &&
-                                tasks.map((task) => (
+                            {data &&
+                                data.map((task) => (
                                     <tr key={task.id}>
                                         <th>{task.id}</th>
                                         <td>{task.task}</td>

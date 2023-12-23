@@ -10,7 +10,7 @@ export const ModalCreate = ({
 }: TModalProps) => {
     return (
         <Modal isOpen={isOpen} handlerClose={handlerClose} sizeCloseBtn={sizeCloseBtn}>
-           <CreateTaskForm />
+           <CreateTaskForm handlerCloseModal={handlerClose}/>
         </Modal>
     );
 };

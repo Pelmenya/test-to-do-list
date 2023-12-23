@@ -13,11 +13,14 @@ import {
     usePostCreateTaskMutation,
 } from '../../../api/to-do-list.ts/to-do-list';
 
-export const CreateTaskForm = () => {
-    const [getAllTasks] =
-    useLazyGetAllTasksQuery();
+export const CreateTaskForm = ({
+    handlerCloseModal,
+}: {
+    handlerCloseModal: () => void;
+}) => {
+    const [getAllTasks] = useLazyGetAllTasksQuery();
 
-    const [postCreateTask, { isLoading, isError, error}] =
+    const [postCreateTask, { isLoading, isError, error }] =
         usePostCreateTaskMutation();
     /*     const err: TError = {
         data: {
@@ -39,8 +42,9 @@ export const CreateTaskForm = () => {
     const onSubmit = async (dto: FieldValues) => {
         if (dto) {
             const res = await postCreateTask(dto).unwrap();
-            if (res.id){
+            if (res.id) {
                 await getAllTasks('').unwrap();
+                handlerCloseModal();
             }
         }
     };
