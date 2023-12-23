@@ -1,16 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useLazyGetAllTasksQuery} from '../../api/to-do-list.ts/to-do-list';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import {
+    useDeleteTaskMutation,
+    useLazyGetAllTasksQuery,
+} from '../../api/to-do-list.ts/to-do-list';
 import { AddIcon } from '../icons/add-icon';
 import { DeleteIcon } from '../icons/delete-icon';
 import { EditIcon } from '../icons/edit-icon';
 import { ModalCreate } from './components/modal-create/modal-create';
 
 export const ToDoList = () => {
-    const [getAllTasks, { isLoading, data }] =
-        useLazyGetAllTasksQuery();
+    const [getAllTasks, { isLoading, data }] = useLazyGetAllTasksQuery();
+    const [deleteTask] = useDeleteTaskMutation();
 
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-    
+
     const handlerCloseCreateModal = useCallback(
         () => setIsOpenCreateModal(false),
         []
@@ -20,6 +23,12 @@ export const ToDoList = () => {
         () => setIsOpenCreateModal(true),
         []
     );
+
+    const handlerDeleteBtn = async (e: SyntheticEvent) => {
+        e.stopPropagation();
+        await deleteTask(e.currentTarget.id).unwrap();
+        await getAllTasks('').unwrap();
+    };
 
     useEffect(() => {
         getAllTasks('').unwrap();
@@ -39,7 +48,10 @@ export const ToDoList = () => {
                                 <th>Задача</th>
                                 <th>Статус</th>
                                 <th>
-                                    <button onClick={handlerCliclCreateBtn} className="btn btn-outline btn-info join-item">
+                                    <button
+                                        onClick={handlerCliclCreateBtn}
+                                        className="btn btn-outline btn-info join-item"
+                                    >
                                         Создать задачу <AddIcon />
                                     </button>
                                 </th>
@@ -57,7 +69,11 @@ export const ToDoList = () => {
                                                 <button className="btn btn-outline btn-info join-item">
                                                     <EditIcon />
                                                 </button>
-                                                <button className="btn btn-outline btn-outline btn-warning join-item">
+                                                <button
+                                                    id={task.id}
+                                                    onClick={handlerDeleteBtn}
+                                                    className="btn btn-outline btn-outline btn-warning join-item"
+                                                >
                                                     <DeleteIcon />
                                                 </button>
                                             </div>

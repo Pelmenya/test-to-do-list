@@ -5,7 +5,7 @@ import { TTask } from '../../types/t-task';
 export const toDoListApi = createApi({
     reducerPath: 'toDoList',
     baseQuery: fetchBaseQuery({
-        baseUrl:  host + '/to-do-list',
+        baseUrl: host + '/to-do-list',
 
     }),
     tagTypes: [],
@@ -23,11 +23,18 @@ export const toDoListApi = createApi({
                 body,
             }),
         }),
+        deleteTask: builder.mutation<TTask, any>({
+            query: (id: string) => ({
+                url: `${id}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 });
 
 // Export hooks for usage in functional components
 export const {
-    useLazyGetAllTasksQuery,    
+    useLazyGetAllTasksQuery,
     usePostCreateTaskMutation,
+    useDeleteTaskMutation,
 } = toDoListApi;
