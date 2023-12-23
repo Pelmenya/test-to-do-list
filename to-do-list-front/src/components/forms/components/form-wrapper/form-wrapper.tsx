@@ -8,7 +8,7 @@ export type TFormWrapperProps = TBaseProps & {
 };
 
 export const FormWrapper = ({ title, name, onSubmit, children }: TFormWrapperProps) => (
-    <div className="flex min-h-full w-full items-center justify-center py-2 px-4 sm:px-6 lg:px-8 text-base-content mt-[-1.5rem]">
+    <div className="flex min-h-full w-full items-center justify-center py-2 px-4 sm:px-6 lg:px-8 text-base-content mt-[-1rem]">
         <div className="w-full max-w-md min-w-[360px]">
             <h2 className="text-center text-3xl font-bold tracking-tight mt-0">
                 {title}

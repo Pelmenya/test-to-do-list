@@ -7,19 +7,27 @@ import { AddIcon } from '../icons/add-icon';
 import { DeleteIcon } from '../icons/delete-icon';
 import { EditIcon } from '../icons/edit-icon';
 import { ModalCreate } from './components/modal-create/modal-create';
+import { ModalEdit } from './components/modal-edit/modal-edit';
 
 export const ToDoList = () => {
     const [getAllTasks, { isLoading, data }] = useLazyGetAllTasksQuery();
     const [deleteTask] = useDeleteTaskMutation();
+    const [editTaskId, setEditTaskId] = useState('');
 
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
     const handlerCloseCreateModal = useCallback(
         () => setIsOpenCreateModal(false),
         []
     );
 
-    const handlerCliclCreateBtn = useCallback(
+    const handlerCloseEditModal = useCallback(
+        () => setIsOpenEditModal(false),
+        []
+    );
+
+    const handlerClickCreateBtn = useCallback(
         () => setIsOpenCreateModal(true),
         []
     );
@@ -28,6 +36,12 @@ export const ToDoList = () => {
         e.stopPropagation();
         await deleteTask(e.currentTarget.id).unwrap();
         await getAllTasks('').unwrap();
+    };
+
+    const handlerEditBtn = async (e: SyntheticEvent) => {
+        e.stopPropagation();
+        setEditTaskId(e.currentTarget.id.replace('edit-',''));
+        setIsOpenEditModal(true);
     };
 
     useEffect(() => {
@@ -49,7 +63,7 @@ export const ToDoList = () => {
                                 <th>Статус</th>
                                 <th>
                                     <button
-                                        onClick={handlerCliclCreateBtn}
+                                        onClick={handlerClickCreateBtn}
                                         className="btn btn-outline btn-info join-item"
                                     >
                                         Создать задачу <AddIcon />
@@ -66,7 +80,11 @@ export const ToDoList = () => {
                                         <td>{task.status}</td>
                                         <td>
                                             <div className="join join-horizontal">
-                                                <button className="btn btn-outline btn-info join-item">
+                                                <button
+                                                    id={`edit-${task.id}`}
+                                                    className="btn btn-outline btn-info join-item"
+                                                    onClick={handlerEditBtn}
+                                                >
                                                     <EditIcon />
                                                 </button>
                                                 <button
@@ -87,6 +105,11 @@ export const ToDoList = () => {
             <ModalCreate
                 isOpen={isOpenCreateModal}
                 handlerClose={handlerCloseCreateModal}
+            />
+            <ModalEdit
+                isOpen={isOpenEditModal}
+                handlerClose={handlerCloseEditModal}
+                taskId={editTaskId}
             />
         </div>
     );
