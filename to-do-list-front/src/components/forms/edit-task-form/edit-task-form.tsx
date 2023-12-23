@@ -10,24 +10,21 @@ import { statuses } from '../../list-box/constants';
 import { useCallback, useEffect, useState } from 'react';
 import {
     useLazyGetAllTasksQuery,
-    usePostCreateTaskMutation,
+    usePutUpdateTaskMutation,
 } from '../../../api/to-do-list.ts/to-do-list';
-
-
-
 
 export const EditTaskForm = ({
     taskId,
     handlerCloseModal,
 }: {
-    taskId: string,
+    taskId: string;
     handlerCloseModal: () => void;
 }) => {
-    const [activIdx, setActiveIdx] = useState(0)
+    const [activIdx, setActiveIdx] = useState(0);
     const [getAllTasks, { data }] = useLazyGetAllTasksQuery();
 
-    const [postCreateTask, { isLoading, isError, error }] =
-        usePostCreateTaskMutation();
+    const [putUpdateTask, { isLoading, isError, error }] =
+        usePutUpdateTaskMutation();
 
     const {
         handleSubmit,
@@ -41,7 +38,7 @@ export const EditTaskForm = ({
 
     const onSubmit = async (dto: FieldValues) => {
         if (dto) {
-            const res = await postCreateTask(dto).unwrap();
+            const res = await putUpdateTask({ ...dto, id: Number(taskId) }).unwrap();
             if (res.id) {
                 await getAllTasks('').unwrap();
                 handlerCloseModal();
@@ -55,19 +52,19 @@ export const EditTaskForm = ({
         },
         [setValue]
     );
-    
+
     useEffect(() => {
         if (taskId && data) {
-            const task = data?.find(item => String(item.id) === taskId)
+            const task = data?.find((item) => String(item.id) === taskId);
             setValue('task', task?.task);
-            setValue('status', task?.status)
-            setActiveIdx(statuses.findIndex(item => task?.status === item));
+            setValue('status', task?.status);
+            setActiveIdx(statuses.findIndex((item) => task?.status === item));
         }
     }, [taskId, setValue, data]);
 
     useEffect(() => {
         if (!data) getAllTasks('').unwrap();
-    }, [data, getAllTasks])
+    }, [data, getAllTasks]);
 
     return (
         <FormWrapper

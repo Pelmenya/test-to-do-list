@@ -29,6 +29,13 @@ export const toDoListApi = createApi({
                 method: 'DELETE',
             }),
         }),
+        putUpdateTask:builder.mutation<TTask, any>({
+            query: (body) => ({
+                url: '',
+                method: 'PUT',
+                body,
+            }),
+        }),
     }),
 });
 
@@ -37,4 +44,5 @@ export const {
     useLazyGetAllTasksQuery,
     usePostCreateTaskMutation,
     useDeleteTaskMutation,
+    usePutUpdateTaskMutation,
 } = toDoListApi;
