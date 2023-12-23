@@ -15,14 +15,6 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
 
-  adminer_container:
-    image: adminer
-    restart: always
-    environment:
-      ADMINER_DEFAULT_SERVER: database
-    ports:
-      - 8080:8080
-
   back:
     build: ./to-do-list-back
     container_name: to-do-list-back
@@ -40,7 +32,7 @@ services:
     depends_on:
       - database
     working_dir: /app
-    command: sh -c "cd /app; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run start:dev"
+    command: sh -c "cd /app; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run build; npm run start"
 
   front:    
     build: ./to-do-list-front
