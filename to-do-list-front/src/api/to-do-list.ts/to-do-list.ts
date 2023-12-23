@@ -10,7 +10,7 @@ export const toDoListApi = createApi({
     }),
     tagTypes: [],
     endpoints: (builder) => ({
-        getAllTasks: builder.mutation<TTask[] | null, any>({
+        getAllTasks: builder.query<TTask[] | null, any>({
             query: () => ({
                 url: '',
                 method: 'GET',
@@ -28,6 +28,6 @@ export const toDoListApi = createApi({
 
 // Export hooks for usage in functional components
 export const {
-    useGetAllTasksMutation,
+    useLazyGetAllTasksQuery,    
     usePostCreateTaskMutation,
 } = toDoListApi;

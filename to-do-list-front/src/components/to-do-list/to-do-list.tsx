@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useGetAllTasksMutation } from '../../api/to-do-list.ts/to-do-list';
+import { useLazyGetAllTasksQuery} from '../../api/to-do-list.ts/to-do-list';
 import { AddIcon } from '../icons/add-icon';
 import { DeleteIcon } from '../icons/delete-icon';
 import { EditIcon } from '../icons/edit-icon';
 import { ModalCreate } from './components/modal-create/modal-create';
-import { TTask } from '../../types/t-task';
 
 export const ToDoList = () => {
     const [getAllTasks, { isLoading, data }] =
-        useGetAllTasksMutation();
+        useLazyGetAllTasksQuery();
 
     const [tasks, setTasks] = useState(data);
 
@@ -19,8 +18,6 @@ export const ToDoList = () => {
         []
     );
 
-    const handlerSetTask = (tasks: TTask[]) => setTasks(tasks);
-
     const handlerCliclCreateBtn = useCallback(
         () => setIsOpenCreateModal(true),
         []
@@ -28,7 +25,7 @@ export const ToDoList = () => {
 
     useEffect(() => {
         getAllTasks('').unwrap();
-    }, [getAllTasks]);
+    }, [getAllTasks, data]);
 
     useEffect(() => {
         setTasks(data)

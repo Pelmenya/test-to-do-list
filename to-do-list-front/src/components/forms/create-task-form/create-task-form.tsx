@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../components/input/input';
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { SubmitBtn } from '../components/submit-btn/submit-btn';
 import { FormWrapper } from '../components/form-wrapper/form-wrapper';
 import { schemaToDoListForm } from '../schemas/yup.schemas';
@@ -9,10 +9,14 @@ import { ListBox } from '../../list-box/list-box';
 import { statuses } from '../../list-box/constants';
 import { useCallback } from 'react';
 import {
+    useLazyGetAllTasksQuery,
     usePostCreateTaskMutation,
 } from '../../../api/to-do-list.ts/to-do-list';
 
 export const CreateTaskForm = () => {
+    const [getAllTasks] =
+    useLazyGetAllTasksQuery();
+
     const [postCreateTask, { isLoading, isError, error}] =
         usePostCreateTaskMutation();
     /*     const err: TError = {
@@ -32,9 +36,12 @@ export const CreateTaskForm = () => {
         reValidateMode: 'onChange',
     });
 
-    const onSubmit = async (dto: any) => {
+    const onSubmit = async (dto: FieldValues) => {
         if (dto) {
-            await postCreateTask(dto).unwrap();
+            const res = await postCreateTask(dto).unwrap();
+            if (res.id){
+                await getAllTasks('').unwrap();
+            }
         }
     };
 
