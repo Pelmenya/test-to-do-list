@@ -100,7 +100,7 @@ export const EditTaskForm = ({
             />
 
             <SubmitBtn
-                text="Создать"
+                text="Редактировать"
                 error={error as TError}
                 isError={isError}
                 isLoading={isLoading}
