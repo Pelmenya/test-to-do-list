@@ -8,16 +8,21 @@ import { TError } from '../../../types/t-error';
 import { ListBox } from '../../list-box/list-box';
 import { statuses } from '../../list-box/constants';
 import { useCallback } from 'react';
+import {
+    usePostCreateTaskMutation,
+} from '../../../api/to-do-list.ts/to-do-list';
 
 export const CreateTaskForm = () => {
-    const err: TError = {
+    const [postCreateTask, { isLoading, isError, error}] =
+        usePostCreateTaskMutation();
+    /*     const err: TError = {
         data: {
             error: '',
             message: '',
             statusCode: 200,
         },
     };
-    const {
+ */ const {
         handleSubmit,
         control,
         formState: { errors },
@@ -29,10 +34,7 @@ export const CreateTaskForm = () => {
 
     const onSubmit = async (dto: any) => {
         if (dto) {
-            /*             const postUser = await postLogin(dto).unwrap();
-            if (postUser) {
-            }
- */
+            await postCreateTask(dto).unwrap();
         }
     };
 
@@ -63,7 +65,7 @@ export const CreateTaskForm = () => {
                 label="Статус"
                 items={statuses}
                 handlerSetItem={handlerSetStaus}
-                activeIdx={2}
+                activeIdx={0}
             />
             <Input
                 hidden={true}
@@ -78,9 +80,9 @@ export const CreateTaskForm = () => {
 
             <SubmitBtn
                 text="Создать"
-                error={err}
-                isError={false}
-                isLoading={false}
+                error={error as TError}
+                isError={isError}
+                isLoading={isLoading}
             />
         </FormWrapper>
     );

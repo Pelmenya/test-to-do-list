@@ -16,10 +16,18 @@ export const toDoListApi = createApi({
                 method: 'GET',
             }),
         }),
+        postCreateTask: builder.mutation<TTask, any>({
+            query: (body) => ({
+                url: '',
+                method: 'POST',
+                body,
+            }),
+        }),
     }),
 });
 
 // Export hooks for usage in functional components
 export const {
     useGetAllTasksMutation,
+    usePostCreateTaskMutation,
 } = toDoListApi;

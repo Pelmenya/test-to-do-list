@@ -1,1 +1,1 @@
-export const statuses = ['admin', 'manager', 'client']
+export const statuses = ['Бэк-лог', 'В работе', 'Готово']
