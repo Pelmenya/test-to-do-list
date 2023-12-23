@@ -1,0 +1,1 @@
+export const statuses = ['admin', 'manager', 'client']

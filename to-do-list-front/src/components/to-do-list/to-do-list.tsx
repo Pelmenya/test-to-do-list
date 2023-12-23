@@ -1,13 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useGetAllTasksMutation } from '../../api/to-do-list.ts/to-do-list';
 import { AddIcon } from '../icons/add-icon';
 import { DeleteIcon } from '../icons/delete-icon';
 import { EditIcon } from '../icons/edit-icon';
-import { TTask } from '../../types/t-task';
+import { ModalCreate } from './components/modal-create/modal-create';
 
 export const ToDoList = () => {
     const [getAllTasks, { isLoading, isError, error, data }] =
         useGetAllTasksMutation();
+
+    const [isOpenCreateModal, setIsOpenCreateModal] = useState(true);
+    
+    const handlerCloseCreateModal = useCallback(
+        () => setIsOpenCreateModal(false),
+        []
+    );
+
+    const handlerCliclCreateBtn = useCallback(
+        () => setIsOpenCreateModal(true),
+        []
+    );
 
     useEffect(() => {
         getAllTasks('').unwrap();
@@ -27,35 +39,39 @@ export const ToDoList = () => {
                                 <th>Задача</th>
                                 <th>Статус</th>
                                 <th>
-                                    <button className="btn btn-outline btn-info join-item">
+                                    <button onClick={handlerCliclCreateBtn} className="btn btn-outline btn-info join-item">
                                         Создать задачу <AddIcon />
                                     </button>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data && (
-                                data.map(task =>
-                                <tr key={task.id}>
-                                    <th>{task.id}</th>
-                                    <td>{task.task}</td>
-                                    <td>{task.status}</td>
-                                    <td>
-                                        <div className="join join-horizontal">
-                                            <button className="btn btn-outline btn-info join-item">
-                                                <EditIcon />
-                                            </button>
-                                            <button className="btn btn-outline btn-outline btn-warning join-item">
-                                                <DeleteIcon />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>)
-                            )}
+                            {data &&
+                                data.map((task) => (
+                                    <tr key={task.id}>
+                                        <th>{task.id}</th>
+                                        <td>{task.task}</td>
+                                        <td>{task.status}</td>
+                                        <td>
+                                            <div className="join join-horizontal">
+                                                <button className="btn btn-outline btn-info join-item">
+                                                    <EditIcon />
+                                                </button>
+                                                <button className="btn btn-outline btn-outline btn-warning join-item">
+                                                    <DeleteIcon />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 )}
             </div>
+            <ModalCreate
+                isOpen={isOpenCreateModal}
+                handlerClose={handlerCloseCreateModal}
+            />
         </div>
     );
 };
