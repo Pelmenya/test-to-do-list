@@ -1,1 +1,1 @@
-export const host = 'http://localhost:3001'; //82.147.71.225 'http://82.147.71.225:3001'
+export const host = 'http://localhost:3031'; //82.147.71.225 'http://82.147.71.225:3001'

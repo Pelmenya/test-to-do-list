@@ -29,7 +29,7 @@ services:
     volumes:
       - ./to-do-list-back:/app
     ports:
-      - 3001:${PORT}
+      - ${PORT}:${PORT}
     environment:      
       - PORT=${PORT}
       - POSTGRES_HOST=${POSTGRES_HOST}
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./to-do-list-front:/var
     ports:
-      - 80:3030
+      - ${PORT_FRONT}:${PORT_FRONT}
     depends_on:
       - back
     working_dir: /var
